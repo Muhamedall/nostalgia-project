@@ -37,7 +37,7 @@ def scraper_products(url):
         return products
 
 if __name__ == '__main__':
-    url = 'https://www.beyondretro.com/collections/men-jackets'
+    url = 'https://www.beyondretro.com/collections/all'
     products = scraper_products(url)
     for product in products:
         print(product)

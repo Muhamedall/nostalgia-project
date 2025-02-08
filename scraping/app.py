@@ -5,7 +5,7 @@ app = Flask(__name__)
 CORS(app)
 @app.route('/api/products', methods=['GET'])
 def get_products():
-    url = 'https://www.beyondretro.com/collections/men-jackets'
+    url = 'https://www.beyondretro.com/collections/all'
     products = scraper_products(url)
     return jsonify(products)
 
