@@ -8,7 +8,7 @@ def scraper_products(url):
         page.goto(url)
 
         # Wait for the product items to load
-        page.wait_for_selector('.shopify-section ')
+        page.wait_for_selector('.shopify-section')
 
         # Extract product data
         products = []
@@ -20,14 +20,20 @@ def scraper_products(url):
                 # Extract price
                 price = item.query_selector('.product-price').inner_text().strip()
 
-                # Extract image URL
-                image = item.query_selector('.rimage__image').get_attribute('src')
+                # Extract background image URL from data-lazy-bgset-src
+                background_image_container = item.query_selector('.rimage-background')
+                background_image_url = background_image_container.get_attribute('data-lazy-bgset-src')
+
+                # Extract main image URL from src
+                main_image = item.query_selector('.rimage__image')
+                main_image_url = main_image.get_attribute('src')
 
                 # Append product data to the list
                 products.append({
                     'title': title,
                     'price': price,
-                    'image': image,
+                    'background_image': background_image_url,
+                    'main_image': main_image_url,
                 })
             except Exception as e:
                 print(f"Error extracting data: {e}")
