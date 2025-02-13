@@ -20,15 +20,15 @@ def scraper_products(url):
                 # Extract price
                 price = item.query_selector('.product-price').inner_text().strip()
 
-                # Extract background image URL from data-lazy-bgset-src
+               
                 background_image_container = item.query_selector('.rimage-background')
                 background_image_url = background_image_container.get_attribute('data-lazy-bgset-src')
 
-                # Extract main image URL from src
+               
                 main_image = item.query_selector('.rimage__image')
                 main_image_url = main_image.get_attribute('src')
 
-                # Append product data to the list
+         
                 products.append({
                     'title': title,
                     'price': price,
