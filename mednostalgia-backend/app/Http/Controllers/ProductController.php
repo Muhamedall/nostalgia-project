@@ -6,6 +6,7 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+    // Store or update products
     public function store(Request $request)
     {
         $products = $request->input('products');
@@ -22,5 +23,12 @@ class ProductController extends Controller
         }
 
         return response()->json(['message' => 'Products saved successfully']);
+    }
+
+    // Fetch all products
+    public function index()
+    {
+        $products = Product::all(); // Fetch all products from the database
+        return response()->json($products); // Return products as JSON
     }
 }

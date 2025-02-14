@@ -2,8 +2,9 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { MdFavoriteBorder } from "react-icons/md";
+import { MdFavoriteBorder, MdNotifications } from "react-icons/md"; // Import MdNotifications
 import { CiShoppingCart } from "react-icons/ci";
+import Modal from "../ui/Modal";
 import {
   Sheet,
   SheetContent,
@@ -25,9 +26,14 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user); // Get the user from Redux store
   const menuRef = useRef<HTMLDivElement>(null); // Ref for the dropdown menu
+  const [openModal, setOpenModal] = useState<string | null>(null);
 
   const toggleForm = () => {
     setIsLogin((prev) => !prev); // Toggle between Login and Sign Up
+  };
+
+  const toggleModal = (modalType: string) => {
+    setOpenModal(openModal === modalType ? null : modalType);
   };
 
   const handleLogout = () => {
@@ -88,49 +94,19 @@ export default function Navbar() {
 
           {/* Mobile: Show user icon and dropdown menu if logged in, otherwise show login/signup sheet */}
           {user ? (
-            <div className="relative" ref={menuRef}>
-              <button
-                onClick={toggleMenu}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                <HiUserCircle size={28} />
+            <>
+              {/* Notification Icon */}
+              <button className="text-gray-600 hover:text-gray-900 relative" onClick={() => toggleModal("notifications")}>
+                <MdNotifications size={28} />
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
+                  3 {/* Replace with actual notification count */}
+                </span>
               </button>
 
-              {/* Dropdown Menu */}
-              {isMenuOpen && (
-                <div className="absolute  right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
-                  {/* Close button */}
-                  <button
-                    onClick={closeMenu}
-                    className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-                  >
-                    <FaTimes size={16} />
-                  </button>
-
-                  {/* Menu Items */}
-                  <Link
-                    href="/account"
-                    onClick={closeMenu}
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Account
-                  </Link>
-                  <Link
-                    href="/messages"
-                    onClick={closeMenu}
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Messages
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+              <button onClick={() => toggleModal("account")} className="text-gray-600 hover:text-gray-900">
+                <HiUserCircle size={30} />
+              </button>
+            </>
           ) : (
             <Sheet>
               <SheetTrigger aria-label="">
@@ -177,50 +153,19 @@ export default function Navbar() {
 
         {/* Conditional Rendering for Login Button or User Menu */}
         {user ? (
-          <div className="relative" ref={menuRef}>
-            {/* Button to toggle the menu */}
-            <button
-              onClick={toggleMenu}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-            >
-              <HiUserCircle size={30} />
+          <>
+            {/* Notification Icon */}
+            <button className="text-gray-600 hover:text-gray-900 relative" onClick={() => toggleModal("notifications")}>
+              <MdNotifications size={28} />
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
+                3 {/* Replace with actual notification count */}
+              </span>
             </button>
 
-            {/* Dropdown Menu */}
-            {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
-                {/* Close button */}
-                <button
-                  onClick={closeMenu}
-                  className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-                >
-                  <FaTimes size={16} />
-                </button>
-
-                {/* Menu Items */}
-                <Link
-                  href="/account"
-                  onClick={closeMenu}
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Account
-                </Link>
-                <Link
-                  href="/messages"
-                  onClick={closeMenu}
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Messages
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+            <button onClick={() => toggleModal("account")} className="text-gray-600 hover:text-gray-900">
+              <HiUserCircle size={30} />
+            </button>
+          </>
         ) : (
           <Sheet>
             <SheetTrigger asChild>
@@ -240,6 +185,35 @@ export default function Navbar() {
             </SheetContent>
           </Sheet>
         )}
+
+        {/* Account Modal */}
+        <Modal isOpen={openModal === "account"} onClose={() => setOpenModal(null)}>
+          <div className="bg-white p-6 rounded-lg w-full max-w-md mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">Account Menu</h2>
+              
+            </div>
+            <div className="mt-4">
+              <button onClick={() => {}} className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100">
+                Profile
+              </button>
+              <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100">
+                Logout
+              </button>
+            </div>
+          </div>
+        </Modal>
+
+        {/* Notifications Modal */}
+        <Modal isOpen={openModal === "notifications"} onClose={() => setOpenModal(null)}>
+          <div className="bg-white p-6 rounded-lg w-full max-w-md mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold">Notifications</h2>
+            
+            </div>
+            <p className="mt-4">You have new notifications!</p>
+          </div>
+        </Modal>
       </div>
     </nav>
   );
