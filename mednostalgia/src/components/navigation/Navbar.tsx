@@ -73,7 +73,7 @@ export default function Navbar() {
       </div>
 
       {/* Search Bar and Icons for Mobile */}
-      <div className="flex flex-col w-full md:hidden items-center mt-4">
+      <div className=" flex flex-col w-full md:hidden items-center mt-4">
         <div className="relative w-full max-w-xs">
           <input
             type="text"
@@ -96,10 +96,10 @@ export default function Navbar() {
           {user ? (
             <>
               {/* Notification Icon */}
-              <button className="text-gray-600 hover:text-gray-900 relative" onClick={() => toggleModal("notifications")}>
+              <button onClick={() => toggleModal("notifications")} className="text-gray-600 hover:text-gray-900 relative" >
                 <MdNotifications size={28} />
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
-                  3 {/* Replace with actual notification count */}
+                  3 
                 </span>
               </button>
 
@@ -130,7 +130,7 @@ export default function Navbar() {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:flex items-center space-x-6 w-full">
+      <div className="  hidden md:flex items-center space-x-6 w-full">
         {/* Full-Width Search Bar */}
         <div className="relative flex-1 ml-4">
           <input
@@ -186,9 +186,11 @@ export default function Navbar() {
           </Sheet>
         )}
 
+      </div>
+      
         {/* Account Modal */}
         <Modal isOpen={openModal === "account"} onClose={() => setOpenModal(null)}>
-          <div className="bg-white p-6 rounded-lg w-full max-w-md mx-4">
+          <div className=" md:bg-white p-6 rounded-lg w-full max-w-md mx-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Account Menu</h2>
               
@@ -214,7 +216,6 @@ export default function Navbar() {
             <p className="mt-4">You have new notifications!</p>
           </div>
         </Modal>
-      </div>
     </nav>
   );
 }
