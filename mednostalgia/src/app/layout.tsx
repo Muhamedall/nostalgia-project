@@ -24,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
       <ReduxProvider>
+      
       <LoadUser />
         <Navbar />
        {children}

@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import NavbarSkeleton from "../skeleton/SkeletonNavbar";
 import { FaSearch, FaTimes } from "react-icons/fa"; // Import FaTimes for the close icon
 import { HiUserCircle } from "react-icons/hi";
 import LoginPage from "@/app/auth/login/page";
@@ -63,6 +64,17 @@ export default function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <NavbarSkeleton />;
+  }
 
   return (
     <nav className="flex flex-col md:flex-row items-center justify-between px-4 py-4 bg-white shadow-md">
