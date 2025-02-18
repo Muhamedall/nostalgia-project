@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MdFavoriteBorder, MdNotifications } from "react-icons/md"; // Import MdNotifications
 import { CiShoppingCart } from "react-icons/ci";
+import Logo from '../../../public/logo.png';
 import Modal from "../ui/Modal";
 import {
   Sheet,
@@ -19,7 +20,7 @@ import SignUpPage from "@/app/auth/register/page";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store"; // Adjust the path to your store
 import { logoutUser } from "@/redux/features/authSlice"; // Adjust the path to your auth slice
-
+import Image from "next/image";
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true); // State to toggle between Login and Sign Up
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to manage menu visibility
@@ -67,9 +68,15 @@ export default function Navbar() {
     <nav className="flex flex-col md:flex-row items-center justify-between px-4 py-4 bg-white shadow-md">
       {/* Logo Section */}
       <div className="flex flex-col items-center md:flex-row md:space-x-6">
-        <Link href="/" className="text-xl font-bold text-gray-800">
-          Mednostalgia
-        </Link>
+      <Link href="/" className="text-xl font-bold text-gray-800">
+    <Image 
+      src={Logo} 
+      alt="Logo"
+      width={90} // Adjust width as needed
+      height={60}  // Adjust height as needed
+      priority // Ensures the image loads quickly
+    />
+  </Link>
       </div>
 
       {/* Search Bar and Icons for Mobile */}
@@ -189,7 +196,7 @@ export default function Navbar() {
       </div>
       
         {/* Account Modal */}
-        <Modal isOpen={openModal === "account"} onClose={() => setOpenModal(null)}>
+        <Modal isOpen={openModal === "account"} onClose={() => setOpenModal(null)} >
           <div className=" md:bg-white p-6 rounded-lg w-full max-w-md mx-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Account Menu</h2>

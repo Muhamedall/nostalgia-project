@@ -38,8 +38,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, anchorRef }) =
   if (!isOpen) return null;
 
   return (
-    <div className=" absolute  md:bottom-4  md:right-4  top-10 md:top-14  z-50 w-96 p-6 ">
-      <div ref={modalRef} className="relative  bg-red-600 md:bg-white shadow-lg rounded-lg p-4 ">
+    <div className=" absolute  md:bottom-4  md:right-4 mt-[9rem] md:mb-[18rem]  z-50 w-96 p-6 ">
+      <div ref={modalRef}  className="relative  bg-white shadow-lg rounded-lg p-4 ">
         <button
           className="absolute top-2 right-2 p-2 rounded-full hover:bg-gray-200"
           onClick={onClose}
