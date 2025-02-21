@@ -77,8 +77,37 @@ export const SIZES = [
     "Woolrich",
     "Wrangler"
   ] as const;
+
+  export const COLORS = [
+    "Black",
+    "White",
+    "Gray",
+    "Navy",
+    "Blue",
+  
+    "Red",
+
+    "Pink",
+    "Orange",
+    "Yellow",
+    "Beige",
+    "Brown",
+    "Green",
+    "Olive",
+    "Purple",
+    "Lavender",
+    "Teal",
+
+
+ 
+    "Multicolor",
+
+
+    "Denim"
+  ] as const;
   
   export type Size = typeof SIZES[number];
   export type Genre = typeof GENRES[number];
   export type Category = typeof CATEGORIES[number];
   export type Mark = typeof MARKS[number];
+  export type Color = typeof COLORS[number];

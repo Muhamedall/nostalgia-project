@@ -6,11 +6,16 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    // Store or update products
     public function store(Request $request)
     {
+        // Log the incoming request payload
+        \Log::info('Incoming request payload:', $request->all());
+    
         $products = $request->input('products');
-
+    
+        // Log the products being processed
+        \Log::info('Products to save:', $products);
+    
         foreach ($products as $productData) {
             Product::updateOrCreate(
                 ['title' => $productData['title']], 
@@ -21,7 +26,7 @@ class ProductController extends Controller
                 ]
             );
         }
-
+    
         return response()->json(['message' => 'Products saved successfully']);
     }
 
