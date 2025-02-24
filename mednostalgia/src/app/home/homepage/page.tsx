@@ -165,34 +165,39 @@ const Products: React.FC = () => {
       <div className="w-full lg:w-3/4 pl-6">
         <h1 className="text-2xl font-bold mb-6">Product List</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {currentProducts.map((product, index) => (
-            <div
-              key={product.id}
-              className="border p-4 rounded-lg shadow-sm text-center relative"
-              onMouseEnter={() => setHoveredProductIndex(index)}
-              onMouseLeave={() => setHoveredProductIndex(null)}
-            >
-              <Image
-                src={product.background_image}
-                alt={product.title}
-                width={200}
-                height={200}
-                className="w-full h-48 object-contain mx-auto"
-                style={{ display: hoveredProductIndex === index ? "block" : "none" }}
-              />
-              <Image
-                src={product.main_image}
-                alt={product.title}
-                width={200}
-                height={200}
-                className="w-full h-48 object-contain mx-auto"
-                style={{ display: hoveredProductIndex === index ? "none" : "block" }}
-              />
-              <h3 className="text-lg font-semibold mt-2">{product.title}</h3>
-              <p className="text-gray-600">{product.price}</p>
-            </div>
-          ))}
-        </div>
+  {currentProducts.map((product, index) => (
+    <div
+      key={product.id}
+      className="border p-4 rounded-lg shadow-sm text-center relative transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+      onMouseEnter={() => setHoveredProductIndex(index)}
+      onMouseLeave={() => setHoveredProductIndex(null)}
+    >
+      <div className="relative h-48 overflow-hidden">
+        <Image
+          src={product.background_image}
+          alt={product.title}
+          width={200}
+          height={200}
+          className="w-full h-48 object-contain mx-auto transition-opacity duration-300"
+          style={{ opacity: hoveredProductIndex === index ? 1 : 0 }}
+        />
+        <Image
+          src={product.main_image}
+          alt={product.title}
+          width={200}
+          height={200}
+          className="w-full h-48 object-contain mx-auto absolute top-0 left-0 transition-opacity duration-300"
+          style={{ opacity: hoveredProductIndex === index ? 0 : 1 }}
+        />
+      </div>
+      <h3 className="text-lg font-semibold mt-2 text-gray-800">{product.title}</h3>
+      <p className="text-gray-600 font-medium">{product.price}</p>
+      <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">
+        Add to Cart
+      </button>
+    </div>
+  ))}
+</div>
 
         {/* Pagination Controls */}
         <div className="flex justify-center mt-6 space-x-2">

@@ -1,56 +1,35 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+// redux/filterSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface FiltersState {
-  selectedFilters: { [key: string]: string[] };
+interface FilterState {
+  size: string[];
+  brand: string[];
+  genre: string[];
+  color: string[];
+  priceRange: [number, number];
 }
 
-const initialState: FiltersState = {
-  selectedFilters: {
-    size: [],
-    brand: [],
-    genre: [],
-    categorie: [],
-    color: [],
-  },
+const initialState: FilterState = {
+  size: [],
+  brand: [],
+  genre: [],
+  color: [],
+  priceRange: [0, 1000],
 };
 
-const filtersSlice = createSlice({
-  name: "filters",
+const filterSlice = createSlice({
+  name: 'filter',
   initialState,
   reducers: {
-    setSelectedFilters: (
-      state,
-      action: PayloadAction<{ [key: string]: string[] }>
-    ) => {
-      state.selectedFilters = action.payload;
+    setFilters: (state, action: PayloadAction<{ key: string; value: string[] }>) => {
+      const { key, value } = action.payload;
+      state[key as keyof FilterState] = value;
     },
-    toggleFilter: (
-      state,
-      action: PayloadAction<{ filterKey: string; value: string }>
-    ) => {
-      const { filterKey, value } = action.payload;
-      const currentFilters = state.selectedFilters[filterKey];
-      if (currentFilters.includes(value)) {
-        state.selectedFilters[filterKey] = currentFilters.filter(
-          (item) => item !== value
-        );
-      } else {
-        state.selectedFilters[filterKey].push(value);
-      }
+    setPriceRange: (state, action: PayloadAction<[number, number]>) => {
+      state.priceRange = action.payload;
     },
   },
 });
 
-// Adding async action support using redux-thunk
-export const toggleFilterAsync = (
-  filterKey: string,
-  value: string
-) => async (dispatch: any) => {
-  // Simulate a delay or an async request (e.g., API call)
-  setTimeout(() => {
-    dispatch(toggleFilter({ filterKey, value }));
-  }, 1000); // Adjust the delay as needed
-};
-
-export const { setSelectedFilters, toggleFilter } = filtersSlice.actions;
-export default filtersSlice.reducer;
+export const { setFilters, setPriceRange } = filterSlice.actions;
+export default filterSlice.reducer;
