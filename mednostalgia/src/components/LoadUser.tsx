@@ -2,7 +2,7 @@
 "use client";
 
 import { useDispatch } from "react-redux";
-import { loadUserFromLocalStorage } from "@/redux/features/authSlice";
+import { loadUserFromLocalStorage } from "@/lib/features/authSlice";
 import { useEffect } from "react";
 
 export default function LoadUser() {

@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "@/redux/features/authSlice";
-import { RootState, AppDispatch } from "../../../redux/store";
+import { registerUser } from "@/lib/features/authSlice";
+import { RootState, AppDispatch } from "../../../lib/store";
 import InputField from "../InputField";
 
 export default function SignUpPage({ toggleForm }: { toggleForm: () => void }) {

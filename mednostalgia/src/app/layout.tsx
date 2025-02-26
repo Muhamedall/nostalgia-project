@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import Navbar from '../components/navigation/Navbar';
 import "./globals.css";
-import ReduxProvider from "@/providers/ReduxProvider";
+import ReduxProvider from "@/app/ReduxProvider";
 import LoadUser from "@/components/LoadUser";
 export const metadata: Metadata = {
   title: "Med Nostalgia",

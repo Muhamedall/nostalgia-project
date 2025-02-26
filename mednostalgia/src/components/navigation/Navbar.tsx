@@ -19,8 +19,8 @@ import { HiUserCircle } from "react-icons/hi";
 import LoginPage from "@/app/auth/login/page";
 import SignUpPage from "@/app/auth/register/page";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store"; // Adjust the path to your store
-import { logoutUser } from "@/redux/features/authSlice"; // Adjust the path to your auth slice
+import { RootState } from "@/lib/store"; // Adjust the path to your store
+import { logoutUser } from "@/lib/features/authSlice"; // Adjust the path to your auth slice
 import Image from "next/image";
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true); // State to toggle between Login and Sign Up

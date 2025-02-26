@@ -1,8 +1,8 @@
 "use client";
 import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "@/redux/features/authSlice";
-import { RootState, AppDispatch } from "../../../redux/store";
+import { loginUser } from "@/lib/features/authSlice";
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { RootState } from "@/lib/store";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
@@ -10,9 +10,11 @@ import InputField from "../InputField";
 
 export default function LoginPage({ toggleForm }: { toggleForm: () => void }) {
 
-  const dispatch: AppDispatch = useDispatch();
+ 
+  
+  const dispatch = useAppDispatch();
 
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading, error } = useAppSelector((state: RootState) => state.auth);
 
   
   const emailRef = useRef<HTMLInputElement>(null);
