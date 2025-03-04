@@ -1,33 +1,27 @@
+// FilterSidebar.tsx
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
-import { SIZES, MARKS, GENRES, COLORS ,CATEGORIES } from "../constants/filters";
-import FilterSidebarSkeleton from "@/components/skeleton/FilterSidebarSkeleton";
+import { SIZES, MARKS, GENRES, COLORS, CATEGORIES } from "../constants/filters";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters, setPriceRange } from "@/lib/features/filtersSlice";
+import { RootState } from "@/lib/store";
 
 interface FilterSidebarProps {
   showFiltersModal: boolean;
   setShowFiltersModal: (filterKey: boolean) => void;
-  onFilterChange: (filters: any) => void;
 }
 
-const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShowFiltersModal, onFilterChange }) => {
+const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShowFiltersModal }) => {
+  const dispatch = useDispatch();
+  const filters = useSelector((state: RootState) => state.filters);
   const [showFilters, setShowFilters] = useState<{ [key: string]: boolean }>({
     size: true,
     brand: true,
     genre: true,
-    categorie : true,
+    categorie: true,
     color: true,
   });
-
-  const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({
-    size: [],
-    brand: [],
-    genre: [],
-    categorie:[],
-    color: [],
-  });
-
-  const [loading, setLoading] = useState(true);
 
   const toggleFilter = (filterKey: string) => {
     setShowFilters((prev) => ({
@@ -36,31 +30,19 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
     }));
   };
 
-  const handleFilterChange = (filterKey: string, value: string) => {
-    setSelectedFilters((prev) => {
-      const newFilters = { ...prev };
-      if (newFilters[filterKey].includes(value)) {
-        newFilters[filterKey] = newFilters[filterKey].filter((item) => item !== value);
-      } else {
-        newFilters[filterKey].push(value);
-      }
-      return newFilters;
-    });
+  const handleFilterChange = (filterKey: keyof typeof filters, value: string) => {
+    const currentFilters = filters[filterKey]; // Get the current filters for the key
+    const updatedFilters = currentFilters.includes(value)
+      ? currentFilters.filter((item) => item !== value) // Remove the value if it exists
+      : [...currentFilters, value]; // Add the value if it doesn't exist
+  
+    // Dispatch the updated filters
+    dispatch(setFilters({ key: filterKey, value: updatedFilters }));
   };
 
-  // Use useEffect to call onFilterChange after selectedFilters is updated
-  useEffect(() => {
-    onFilterChange(selectedFilters);
-  }, [selectedFilters]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <FilterSidebarSkeleton />;
-  }
+  const handlePriceChange = (newPriceRange: [number, number]) => {
+    dispatch(setPriceRange(newPriceRange));
+  };
 
   return (
     <>
@@ -68,11 +50,22 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
       <div className="hidden lg:block w-1/4 h-[50%] p-4 bg-[#F4EBD0] rounded-lg shadow-md">
         <h2 className="text-xl font-bold mb-4">Filters</h2>
 
-        {/* Price Filter */}
-        <div className="mb-6 bg-white p-4 rounded-lg">
-          <h3 className="font-semibold mb-2">Price $</h3>
-          <input type="range" min="0" max="1000" className="w-full" />
-        </div>
+       {/* Price Filter */}
+<div className="mb-6 bg-white p-4 rounded-lg">
+  <h3 className="font-semibold mb-2">Price $</h3>
+  <input
+    type="range"
+    min="0"
+    max="1000"
+    className="w-full"
+    value={filters.priceRange[1]}
+    onChange={(e) => handlePriceChange([filters.priceRange[0], parseInt(e.target.value)])}
+  />
+  {/* Display the selected price */}
+  <p className="text-sm text-gray-600 mt-2">
+    Selected Price: ${filters.priceRange[1]}
+  </p>
+</div>
 
         {/* Size Filter */}
         <div className="mb-6 bg-white p-4 rounded-lg">
@@ -89,7 +82,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
                   <input
                     type="checkbox"
                     className="mr-2"
-                    checked={selectedFilters.size.includes(size)}
+                    checked={filters.size.includes(size)}
                     onChange={() => handleFilterChange("size", size)}
                   />
                   {size}
@@ -98,25 +91,26 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
             </div>
           )}
         </div>
-         {/* Categories Filter */}
-         <div className="mb-6 bg-white p-4 rounded-lg">
+
+        {/* Categories Filter */}
+        <div className="mb-6 bg-white p-4 rounded-lg">
           <div className="flex justify-between items-center">
             <h3 className="font-semibold">Categories</h3>
             <span onClick={() => toggleFilter("categorie")} className="cursor-pointer">
               {showFilters.categorie ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
             </span>
           </div>
-          {showFilters.categorie  && (
+          {showFilters.categorie && (
             <div className="space-y-2 mt-2 overflow-auto overscroll-contain max-h-40">
-              {CATEGORIES.map((categorie , index) => (
+              {CATEGORIES.map((categorie, index) => (
                 <label key={index} className="flex items-center">
                   <input
                     type="checkbox"
                     className="mr-2"
-                    checked={selectedFilters.size.includes(categorie )}
-                    onChange={() => handleFilterChange("size", categorie )}
+                    checked={filters.size.includes(categorie)}
+                    onChange={() => handleFilterChange("size", categorie)}
                   />
-                  {categorie }
+                  {categorie}
                 </label>
               ))}
             </div>
@@ -138,7 +132,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
                   <input
                     type="checkbox"
                     className="mr-2"
-                    checked={selectedFilters.brand.includes(brand)}
+                    checked={filters.brand.includes(brand)}
                     onChange={() => handleFilterChange("brand", brand)}
                   />
                   {brand}
@@ -163,7 +157,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
                   <input
                     type="checkbox"
                     className="mr-2"
-                    checked={selectedFilters.genre.includes(genre)}
+                    checked={filters.genre.includes(genre)}
                     onChange={() => handleFilterChange("genre", genre)}
                   />
                   {genre}
@@ -173,34 +167,38 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
           )}
         </div>
 
-        {/* Color Filter */}
-        <div className="mb-6 bg-white p-4 rounded-lg">
-          <div className="flex justify-between items-center">
-            <h3 className="font-semibold">Color</h3>
-            <span onClick={() => toggleFilter("color")} className="cursor-pointer">
-              {showFilters.color ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
-            </span>
-          </div>
-          {showFilters.color && (
-            <div className="grid grid-cols-4 gap-2 mt-2">
-              {COLORS.map((color, index) => (
-                <label key={index} className="flex flex-col items-center">
-                  <input
-                    type="checkbox"
-                    className="hidden"
-                    checked={selectedFilters.color.includes(color)}
-                    onChange={() => handleFilterChange("color", color)}
-                  />
-                  <div
-                    className="w-6 h-6 rounded-full border cursor-pointer"
-                    style={{ backgroundColor: color.toLowerCase() }}
-                  ></div>
-                  <span className="text-xs mt-1">{color}</span>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+     {/* Color Filter */}
+<div className="mb-6 bg-white p-4 rounded-lg">
+  <div className="flex justify-between items-center">
+    <h3 className="font-semibold">Color</h3>
+    <span onClick={() => toggleFilter("color")} className="cursor-pointer">
+      {showFilters.color ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
+    </span>
+  </div>
+  {showFilters.color && (
+    <div className="grid grid-cols-4 gap-2 mt-2">
+      {COLORS.map((color, index) => (
+        <label key={index} className="flex flex-col items-center">
+          <input
+            type="checkbox"
+            className="hidden"
+            checked={filters.color.includes(color)}
+            onChange={() => handleFilterChange("color", color)}
+          />
+          <div
+            className={`w-8 h-8 rounded-full border-2 cursor-pointer relative ${
+              filters.color.includes(color)
+                ? "ring-4 ring-offset-2 ring-black" // Ring effect for selected color
+                : "border-gray-300"
+            }`}
+            style={{ backgroundColor: color.toLowerCase() }}
+          ></div>
+          <span className="text-xs mt-1">{color}</span>
+        </label>
+      ))}
+    </div>
+  )}
+</div>
       </div>
 
       {/* Filters Modal (Mobile) */}
@@ -220,7 +218,14 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
             {/* Price Filter */}
             <div className="mb-6 bg-white p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Price $</h3>
-              <input type="range" min="0" max="1000" className="w-full" />
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                className="w-full"
+                value={filters.priceRange[1]}
+                onChange={(e) => handlePriceChange([filters.priceRange[0], parseInt(e.target.value)])}
+              />
             </div>
 
             {/* Size Filter */}
@@ -238,7 +243,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
                       <input
                         type="checkbox"
                         className="mr-2"
-                        checked={selectedFilters.size.includes(size)}
+                        checked={filters.size.includes(size)}
                         onChange={() => handleFilterChange("size", size)}
                       />
                       {size}
@@ -263,7 +268,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
                       <input
                         type="checkbox"
                         className="mr-2"
-                        checked={selectedFilters.brand.includes(brand)}
+                        checked={filters.brand.includes(brand)}
                         onChange={() => handleFilterChange("brand", brand)}
                       />
                       {brand}
@@ -288,7 +293,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
                       <input
                         type="checkbox"
                         className="mr-2"
-                        checked={selectedFilters.genre.includes(genre)}
+                        checked={filters.genre.includes(genre)}
                         onChange={() => handleFilterChange("genre", genre)}
                       />
                       {genre}
@@ -313,7 +318,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShow
                       <input
                         type="checkbox"
                         className="hidden"
-                        checked={selectedFilters.color.includes(color)}
+                        checked={filters.color.includes(color)}
                         onChange={() => handleFilterChange("color", color)}
                       />
                       <div

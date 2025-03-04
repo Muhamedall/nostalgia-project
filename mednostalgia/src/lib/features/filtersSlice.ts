@@ -1,7 +1,7 @@
-// redux/filterSlice.ts
+// slices/filtersSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface FilterState {
+interface FiltersState {
   size: string[];
   brand: string[];
   genre: string[];
@@ -9,7 +9,7 @@ interface FilterState {
   priceRange: [number, number];
 }
 
-const initialState: FilterState = {
+const initialState: FiltersState = {
   size: [],
   brand: [],
   genre: [],
@@ -17,19 +17,23 @@ const initialState: FilterState = {
   priceRange: [0, 1000],
 };
 
-const filterSlice = createSlice({
-  name: 'filter',
+const filtersSlice = createSlice({
+  name: 'filters',
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<{ key: string; value: string[] }>) => {
+    // Action to update filters like size, brand, genre, color
+    setFilters: (state, action: PayloadAction<{ key: keyof FiltersState; value: string[] }>) => {
       const { key, value } = action.payload;
-      state[key as keyof FilterState] = value;
+      if (key !== 'priceRange') {
+        state[key] = value;
+      }
     },
+    // Action to update priceRange
     setPriceRange: (state, action: PayloadAction<[number, number]>) => {
       state.priceRange = action.payload;
     },
   },
 });
 
-export const { setFilters, setPriceRange } = filterSlice.actions;
-export default filterSlice.reducer;
+export const { setFilters, setPriceRange } = filtersSlice.actions;
+export default filtersSlice.reducer;

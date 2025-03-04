@@ -15,9 +15,11 @@ export const SIZES = [
     "20"
   ] as const;
   
-  export const GENRES = ["Men", "Women"] as const;
+  export const GENRES = ["Mens", "Womens"] as const;
   
   export const CATEGORIES = [
+    "SHIRT",
+    "VEST",
     "ACCESSORIES",
     "ALL-IN-ONES",
     "BACKPACKS",
@@ -33,7 +35,8 @@ export const SIZES = [
     "JACKET & DRESS SET",
     "JACKET & SKIRT SET",
     "JACKET & TROUSER SET",
-    "JACKETS",
+    "JACKET ",
+    
     "JEANS",
     "JUMPSUITS",
     "KIDS",
@@ -64,7 +67,7 @@ export const SIZES = [
     "L.L Bean",
     "Lacoste",
     "Lee",
-    "Levis",
+    "Levi's",
     "London Fog",
     "Nike",
     "The North Face",
@@ -81,7 +84,7 @@ export const SIZES = [
   export const COLORS = [
     "Black",
     "White",
-    "Gray",
+    "Grey",
     "Navy",
     "Blue",
   
