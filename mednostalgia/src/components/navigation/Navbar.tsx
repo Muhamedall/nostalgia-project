@@ -22,6 +22,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store"; // Adjust the path to your store
 import { logoutUser } from "@/lib/features/authSlice"; // Adjust the path to your auth slice
 import Image from "next/image";
+import { setSearchTerm } from '@/lib/features/searchSlice';
+
+
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true); // State to toggle between Login and Sign Up
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to manage menu visibility
@@ -50,6 +53,11 @@ export default function Navbar() {
   const closeMenu = () => {
     setIsMenuOpen(false); // Close the menu
   };
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    dispatch(setSearchTerm(event.target.value));
+  };
+
 
   // Close the menu when clicking outside
   useEffect(() => {
@@ -98,6 +106,7 @@ export default function Navbar() {
             type="text"
             placeholder="Search..."
             className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-full shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={handleSearchChange}
           />
           <button aria-label="Search" className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-600 hover:text-gray-900">
             <FaSearch size={18} />
@@ -153,11 +162,14 @@ export default function Navbar() {
         {/* Full-Width Search Bar */}
         <div className="relative flex-1 ml-4">
           <input
+         
             type="text"
             placeholder="Search..."
             className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-full shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={handleSearchChange}
+           
           />
-          <button aria-label="Search" className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-600 hover:text-gray-900">
+          <button aria-label="Search" className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-600 hover:text-gray-900" >
             <FaSearch size={18} />
           </button>
         </div>

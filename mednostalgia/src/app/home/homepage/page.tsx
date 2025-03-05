@@ -9,15 +9,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "@/lib/features/productsSlice";
 import { RootState } from "@/lib/store";
 
-import { useSearchParams } from "next/navigation"; 
+
 
 
 const Products: React.FC = () => {
-  const searchParams = useSearchParams(); // Get search params from the URL
-  const searchQuery = searchParams.get("search") || ""; // Get the search query
+  
 
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.products.items);
+  const searchTerm = useSelector((state: RootState) => state.search.term);
   const status = useSelector((state: RootState) => state.products.status);
   const error = useSelector((state: RootState) => state.products.error);
   const filters = useSelector((state: RootState) => state.filters);
@@ -30,19 +30,20 @@ const Products: React.FC = () => {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchProducts()); // Fetch products when the component mounts
+      dispatch(fetchProducts()); 
     }
   }, [status, dispatch]);
 
   const filterProducts = (products: typeof products) => {
     return products.filter((product) => {
+      
       const titleParts = product.title.split(" - ");
       const brand = titleParts[0].split(" ")[0]; // First word is the brand
       const color = titleParts[0].split(" ").slice(1, -2).join(" "); // Middle words are the color
       const imageParts =product.main_image.split(" - ");
       const genre = imageParts[0].split(" ").slice(-2).join(" "); // Last two words are the genre
 
-
+      const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
       // Filter by size
       const matchesSize =
         filters.size.length === 0 ||
@@ -64,11 +65,9 @@ const Products: React.FC = () => {
       // Filter by price
       const price = parseFloat(product.price.replace("£", ""));
       const matchesPrice = price >= filters.priceRange[0] && price <= filters.priceRange[1];
-   const matchesSearch =
-        searchQuery === "" ||
-        product.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchesSize && matchesBrand && matchesGenre && matchesColor && matchesPrice && matchesSearch;
+
+      return  matchesSearch && matchesSize && matchesBrand && matchesGenre && matchesColor && matchesPrice  ;
     });
   };
 
