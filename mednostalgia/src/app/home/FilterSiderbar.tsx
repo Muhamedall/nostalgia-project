@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { SIZES, MARKS, GENRES, COLORS, CATEGORIES } from "../constants/filters";
-import { useDispatch, useSelector } from "react-redux";
 import { setFilters, setPriceRange } from "@/lib/features/filtersSlice";
 import { RootState } from "@/lib/store";
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
 interface FilterSidebarProps {
   showFiltersModal: boolean;
@@ -13,8 +13,8 @@ interface FilterSidebarProps {
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({ showFiltersModal, setShowFiltersModal }) => {
-  const dispatch = useDispatch();
-  const filters = useSelector((state: RootState) => state.filters);
+  const dispatch = useAppDispatch();
+  const filters = useAppSelector((state: RootState) => state.filters);
   const [showFilters, setShowFilters] = useState<{ [key: string]: boolean }>({
     size: true,
     brand: true,

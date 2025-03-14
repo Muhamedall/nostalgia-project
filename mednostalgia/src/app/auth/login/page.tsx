@@ -14,7 +14,7 @@ export default function LoginPage({ toggleForm }: { toggleForm: () => void }) {
   
   const dispatch = useAppDispatch();
 
-  const { loading, error } = useAppSelector((state: RootState) => state.auth);
+  const { loading } = useAppSelector((state: RootState) => state.auth);  
 
   
   const emailRef = useRef<HTMLInputElement>(null);
@@ -174,7 +174,7 @@ export default function LoginPage({ toggleForm }: { toggleForm: () => void }) {
       {/* Sign Up Link */}
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600">
-          Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
           <button
             onClick={toggleForm}
             className="text-orange-500 hover:text-orange-600 font-medium focus:outline-none"

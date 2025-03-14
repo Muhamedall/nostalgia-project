@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { MdFavoriteBorder, MdNotifications } from "react-icons/md"; // Import MdNotifications
 import { CiShoppingCart } from "react-icons/ci";
 import Logo from '../../../public/logo.png';
-import Modal from "../ui/Modal";
 import {
   Sheet,
   SheetContent,
@@ -14,45 +13,29 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import NavbarSkeleton from "../skeleton/SkeletonNavbar";
-import { FaSearch, FaTimes } from "react-icons/fa"; // Import FaTimes for the close icon
+import { FaSearch } from "react-icons/fa"; // Import FaTimes for the close icon
 import { HiUserCircle } from "react-icons/hi";
 import LoginPage from "@/app/auth/login/page";
 import SignUpPage from "@/app/auth/register/page";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { RootState } from "@/lib/store"; // Adjust the path to your store
-import { logoutUser } from "@/lib/features/authSlice"; // Adjust the path to your auth slice
 import Image from "next/image";
 import { setSearchTerm } from '@/lib/features/searchSlice';
 
 
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(true); // State to toggle between Login and Sign Up
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to manage menu visibility
-  const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.auth.user); // Get the user from Redux store
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state: RootState) => state.auth.user); // Get the user from Redux store
   const menuRef = useRef<HTMLDivElement>(null); // Ref for the dropdown menu
-  const [openModal, setOpenModal] = useState<string | null>(null);
 
   const toggleForm = () => {
     setIsLogin((prev) => !prev); // Toggle between Login and Sign Up
   };
 
-  const toggleModal = (modalType: string) => {
-    setOpenModal(openModal === modalType ? null : modalType);
-  };
 
-  const handleLogout = () => {
-    dispatch(logoutUser()); // Dispatch logout action
-    setIsMenuOpen(false); // Close the menu after logout
-  };
 
-  const toggleMenu = () => {
-    setIsMenuOpen((prev) => !prev); // Toggle menu visibility
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false); // Close the menu
-  };
+ 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
     dispatch(setSearchTerm(event.target.value));
@@ -63,7 +46,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        closeMenu();
+      
       }
     };
 
@@ -124,14 +107,14 @@ export default function Navbar() {
           {user ? (
             <>
               {/* Notification Icon */}
-              <button onClick={() => toggleModal("notifications")} className="text-gray-600 hover:text-gray-900 relative" >
+              <button  className="text-gray-600 hover:text-gray-900 relative" >
                 <MdNotifications size={28} />
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
                   3 
                 </span>
               </button>
 
-              <button onClick={() => toggleModal("account")} className="text-gray-600 hover:text-gray-900">
+              <button  className="text-gray-600 hover:text-gray-900">
                 <HiUserCircle size={30} />
               </button>
             </>
@@ -186,14 +169,14 @@ export default function Navbar() {
         {user ? (
           <>
             {/* Notification Icon */}
-            <button className="text-gray-600 hover:text-gray-900 relative" onClick={() => toggleModal("notifications")}>
+            <button className="text-gray-600 hover:text-gray-900 relative" >
               <MdNotifications size={28} />
               <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
                 3 {/* Replace with actual notification count */}
               </span>
             </button>
 
-            <button onClick={() => toggleModal("account")} className="text-gray-600 hover:text-gray-900">
+            <button  className="text-gray-600 hover:text-gray-900">
               <HiUserCircle size={30} />
             </button>
           </>
@@ -219,34 +202,7 @@ export default function Navbar() {
 
       </div>
       
-        {/* Account Modal */}
-        <Modal isOpen={openModal === "account"} onClose={() => setOpenModal(null)} >
-          <div className=" md:bg-white p-6 rounded-lg w-full max-w-md mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold">Account Menu</h2>
-              
-            </div>
-            <div className="mt-4">
-              <button onClick={() => {}} className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100">
-                Profile
-              </button>
-              <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100">
-                Logout
-              </button>
-            </div>
-          </div>
-        </Modal>
-
-        {/* Notifications Modal */}
-        <Modal isOpen={openModal === "notifications"} onClose={() => setOpenModal(null)}>
-          <div className="bg-white p-6 rounded-lg w-full max-w-md mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold">Notifications</h2>
-            
-            </div>
-            <p className="mt-4">You have new notifications!</p>
-          </div>
-        </Modal>
+        
     </nav>
   );
 }

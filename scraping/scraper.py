@@ -1,11 +1,11 @@
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright 
 import requests
 import json
 import time
 
-LARAVEL_API_URL = "http://127.0.0.1:8000/api/products"  # Update if needed
+LARAVEL_API_URL = "http://127.0.0.1:8000/api/products"  
 
-def scrape_page(url, retries=3):
+def scrape_page(url, retries=3): ##numbre retries = 3  
     """Scrape a page with retry logic."""
     success = False
     products = []

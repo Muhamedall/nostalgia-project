@@ -40,7 +40,7 @@ export const SIZES = [
     "JEANS",
     "JUMPSUITS",
     "KIDS",
-    "KIMONOS",
+    "KIMONO",
     "KNITS",
     "LINGERIE",
     "PLAYSUITS"

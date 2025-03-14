@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios'; // Import AxiosError
 
 interface User {
     name: string;
@@ -12,40 +12,39 @@ interface AuthState {
     error: string | null;
 }
 
+interface ApiError {
+    message: string;
+    // Add other fields if your API error response contains more information
+}
+
 const initialState: AuthState = {
     user: null,
     loading: false,
     error: null,
 };
 
-export const registerUser = createAsyncThunk(
+export const registerUser = createAsyncThunk<User, { name: string; email: string; password: string; password_confirmation: string }, { rejectValue: ApiError }>(
     "auth/registerUser",
-    async (
-        userData: {
-            name: string;
-            email: string;
-            password: string;
-            password_confirmation: string;
-        },
-        { rejectWithValue }
-    ) => {
+    async (userData, { rejectWithValue }) => {
         try {
             const response = await axios.post("http://localhost:8000/api/register", userData);
             return response.data.user;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
+        } catch (error) {
+            const axiosError = error as AxiosError<ApiError>; // Cast error to AxiosError
+            return rejectWithValue(axiosError.response?.data || { message: 'An error occurred' });
         }
     }
 );
 
-export const loginUser = createAsyncThunk(
+export const loginUser = createAsyncThunk<User, { email: string; password: string }, { rejectValue: ApiError }>(
     'auth/loginUser',
-    async (userData: { email: string; password: string }, { rejectWithValue }) => {
+    async (userData, { rejectWithValue }) => {
         try {
             const response = await axios.post('http://localhost:8000/api/login', userData);
             return response.data.user;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
+        } catch (error) {
+            const axiosError = error as AxiosError<ApiError>; // Cast error to AxiosError
+            return rejectWithValue(axiosError.response?.data || { message: 'An error occurred' });
         }
     }
 );
@@ -79,9 +78,9 @@ const authSlice = createSlice({
                 // Save user data to localStorage
                 localStorage.setItem('user', JSON.stringify(action.payload));
             })
-            .addCase(registerUser.rejected, (state, action: PayloadAction<any>) => {
+            .addCase(registerUser.rejected, (state, action: PayloadAction<ApiError | undefined>) => {
                 state.loading = false;
-                state.error = action.payload.message;
+                state.error = action.payload?.message || 'Registration failed';
             })
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
@@ -93,9 +92,9 @@ const authSlice = createSlice({
                 // Save user data to localStorage
                 localStorage.setItem('user', JSON.stringify(action.payload));
             })
-            .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
+            .addCase(loginUser.rejected, (state, action: PayloadAction<ApiError | undefined>) => {
                 state.loading = false;
-                state.error = action.payload.message;
+                state.error = action.payload?.message || 'Login failed';
             });
     },
 });

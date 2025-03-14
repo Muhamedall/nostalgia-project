@@ -10,7 +10,7 @@ import InputField from "../InputField";
 
 export default function SignUpPage({ toggleForm }: { toggleForm: () => void }) {
   const dispatch: AppDispatch = useDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading } = useSelector((state: RootState) => state.auth);
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);

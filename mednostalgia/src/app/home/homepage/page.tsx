@@ -5,9 +5,11 @@ import FilterSidebar from "../FilterSiderbar";
 import ProductsSkeleton from "@/components/skeleton/ProductsSkeleton";
 import FilterSidebarSkeleton from "@/components/skeleton/FilterSidebarSkeleton";
 import { IoFilter } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+
 import { fetchProducts } from "@/lib/features/productsSlice";
 import { RootState } from "@/lib/store";
+
 
 
 
@@ -15,12 +17,12 @@ import { RootState } from "@/lib/store";
 const Products: React.FC = () => {
   
 
-  const dispatch = useDispatch();
-  const products = useSelector((state: RootState) => state.products.items);
-  const searchTerm = useSelector((state: RootState) => state.search.term);
-  const status = useSelector((state: RootState) => state.products.status);
-  const error = useSelector((state: RootState) => state.products.error);
-  const filters = useSelector((state: RootState) => state.filters);
+  const dispatch =useAppDispatch();
+  const products = useAppSelector((state: RootState) => state.products.items);
+  const searchTerm = useAppSelector((state: RootState) => state.search.term);
+  const status = useAppSelector((state: RootState) => state.products.status);
+  const error = useAppSelector((state: RootState) => state.products.error);
+  const filters = useAppSelector((state: RootState) => state.filters);
   const [hoveredProductIndex, setHoveredProductIndex] = useState<number | null>(null);
   const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
