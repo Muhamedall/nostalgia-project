@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import FilterSidebar from "../FilterSiderbar";
+import FilterSidebar from "../home/FilterSiderbar";
 import ProductsSkeleton from "@/components/skeleton/ProductsSkeleton";
 import FilterSidebarSkeleton from "@/components/skeleton/FilterSidebarSkeleton";
 import { IoFilter } from "react-icons/io5";
@@ -10,12 +10,17 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { fetchProducts } from "@/lib/features/productsSlice";
 import { RootState } from "@/lib/store";
 
+import { useRouter } from "next/navigation"; // ✅ Use correct import
 
+import Link from "next/link";
 
+const generateSlug = (title: string) =>
+  title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 
 const Products: React.FC = () => {
-  
+  const router=useRouter();
+
 
   const dispatch =useAppDispatch();
   const products = useAppSelector((state: RootState) => state.products.items);
@@ -115,6 +120,7 @@ const Products: React.FC = () => {
               className="border p-4 rounded-lg shadow-sm text-center relative transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
               onMouseEnter={() => setHoveredProductIndex(index)}
               onMouseLeave={() => setHoveredProductIndex(null)}
+
             >
               <div className="relative h-48 overflow-hidden">
                 <Image
@@ -134,7 +140,10 @@ const Products: React.FC = () => {
                   style={{ opacity: hoveredProductIndex === index ? 0 : 1 }}
                 />
               </div>
-              <h3 className="text-lg font-semibold mt-2 text-gray-800">{product.title}</h3>
+              <h3 className="text-lg font-semibold mt-2 text-gray-800 ">{product.title}</h3>
+              <Link href={`/products/${generateSlug(product.title)}`} className="bg-red-600">
+            View Product
+          </Link>
               <p className="text-gray-600 font-medium">{product.price}</p>
               <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">
                 Add to Cart
