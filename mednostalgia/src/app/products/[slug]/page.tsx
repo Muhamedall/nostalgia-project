@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useAppSelector } from "@/lib/hooks";
 import { RootState } from "@/lib/store";
+import Image from "next/image";
 
 // Function to convert title to slug format
 const generateSlug = (title: string) =>
@@ -18,9 +19,18 @@ export default function ProductPage() {
   if (!product) return <h1>Product not found</h1>;
 
   return (
-    <div>
+    <div className="flex flex-row mt-5">
+      <Image
+                          src={product.main_image}
+                          alt={product.title}
+                          width={100}
+                          height={100}
+                          className={`w-[50%] h-[50%] object-contain  `}
+                        />
+       
       <h1>{product.title}</h1>
       <p>Price: {product.price}</p>
+      
     </div>
   );
 }
