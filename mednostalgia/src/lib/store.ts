@@ -4,12 +4,14 @@ import authReducer from './features/authSlice';
 import filtersReducer from './features/filtersSlice';
 import productsReducer from './features/productsSlice';
 import searchReducer from './features/searchSlice';
+import favoritesReducer from "./features/favoritesSlice";
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         filters: filtersReducer,
         products: productsReducer,
         search: searchReducer,
+        favorites: favoritesReducer,
     
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),

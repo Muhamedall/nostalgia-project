@@ -8,6 +8,7 @@ interface Product {
   price: string;
   background_image: string;
   main_image: string;
+
 }
 
 interface ProductsState {
@@ -23,7 +24,7 @@ const initialState: ProductsState = {
 };
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
-  const response = await axios.get('http://127.0.0.1:8000/api/products');
+  const response = await axios.get('http://127.0.0.1:8000/api/products', { withCredentials: true });
   return response.data;
 });
 

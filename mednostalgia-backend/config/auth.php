@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'sanctum', // Assure-toi que le driver est bien "sanctum"
+            'provider' => 'users',
+        ],
     ],
 
     /*
